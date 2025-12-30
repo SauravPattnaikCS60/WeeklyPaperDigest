@@ -5,18 +5,19 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Weekly Paper Picks</title>
   <meta name="color-scheme" content="light dark" />
+
   <style>
     :root{
-      --bg: #0b0c10;
-      --panel: #11131a;
-      --panel2: #0f1117;
-      --text: #e7e9ee;
-      --muted: #a7afc0;
-      --border: rgba(255,255,255,.10);
-      --shadow: 0 10px 30px rgba(0,0,0,.35);
-      --radius: 14px;
-      --maxw: 1100px;
-      --accent: #7aa2ff;
+      --bg:#0b0c10;
+      --panel:#11131a;
+      --panel2:#0f1117;
+      --text:#e7e9ee;
+      --muted:#a7afc0;
+      --border:rgba(255,255,255,.10);
+      --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:14px;
+      --maxw:1100px;
+      --accent:#7aa2ff;
     }
     @media (prefers-color-scheme: light){
       :root{
@@ -25,8 +26,8 @@
         --panel2:#f2f4fa;
         --text:#121521;
         --muted:#5c647a;
-        --border: rgba(10,20,40,.10);
-        --shadow: 0 10px 25px rgba(20,30,60,.10);
+        --border:rgba(10,20,40,.10);
+        --shadow:0 10px 25px rgba(20,30,60,.10);
         --accent:#315efb;
       }
     }
@@ -34,10 +35,10 @@
     *{ box-sizing:border-box; }
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
       background: var(--bg);
       color: var(--text);
-      line-height: 1.5;
+      line-height: 1.55;
     }
 
     .wrap{
@@ -46,107 +47,60 @@
       padding: 22px 16px 44px;
     }
 
-    #weeklyTopic{
-        font-weight: 600;
-        color: var(--accent);
-      }
-    
     header{
-      margin-bottom: 16px;
       display:flex;
       flex-direction: column;
       gap: 8px;
+      margin-bottom: 18px;
     }
 
-    h1{
-      font-size: 22px;
-      margin: 0;
-      letter-spacing: 0.2px;
-    }
-
-    .tagline{
-      color: var(--muted);
-      font-size: 13px;
-      margin: 0;
-    }
+    h1{ font-size:22px; margin:0; }
+    .tagline{ font-size:13px; color:var(--muted); margin:0; }
+    #weeklyTopic{ color:var(--accent); font-weight:600; }
 
     .meta{
       display:flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      align-items:center;
-      color: var(--muted);
-      font-size: 12px;
-      margin-top: 2px;
+      gap:10px;
+      flex-wrap:wrap;
+      font-size:12px;
+      color:var(--muted);
     }
 
     .chip{
-      display:inline-flex;
-      align-items:center;
-      gap: 6px;
-      padding: 6px 10px;
-      background: var(--panel2);
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      white-space: nowrap;
+      padding:6px 10px;
+      border-radius:999px;
+      background:var(--panel2);
+      border:1px solid var(--border);
     }
 
-    .topicHeader{
-      margin-top: 18px;
-      margin-bottom: 10px;
-      display:flex;
-      align-items:center;
-      justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .topicHeader h2{
-      font-size: 14px;
-      margin: 0;
-      font-weight: 700;
-      letter-spacing: .2px;
-      text-transform: capitalize;
-    }
-
-    .topicHeader .count{
-      font-size: 12px;
-      color: var(--muted);
-      padding: 6px 10px;
-      background: var(--panel2);
-      border: 1px solid var(--border);
-      border-radius: 999px;
-    }
-
+    /* === GRID === */
     .grid{
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px; /* slightly more breathing room */
     }
 
+    /* === CARD === */
     .card{
       background: var(--panel);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      overflow: hidden;
       display:flex;
       flex-direction: column;
-      min-height: 120px;
     }
 
     .cardBody{
-      padding: 14px 14px 12px;
+      padding: 14px;
       display:flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 10px;
     }
 
     .cardTitle{
       font-size: 14px;
       font-weight: 700;
       margin: 0;
-      line-height: 1.35;
     }
 
     .cardTitle a{
@@ -157,93 +111,73 @@
 
     .cardSub{
       display:flex;
-      gap: 8px;
+      gap: 6px;
       flex-wrap: wrap;
-      color: var(--muted);
       font-size: 12px;
+      color: var(--muted);
     }
 
     .tag{
-      display:inline-flex;
-      align-items:center;
-      gap: 6px;
       padding: 4px 8px;
+      border-radius: 999px;
       background: var(--panel2);
       border: 1px solid var(--border);
-      border-radius: 999px;
       white-space: nowrap;
+      font-size: 12px;
     }
 
-    .excerpt{
+    .tag.small{
+      font-size: 11px;
+      padding: 3px 7px;
+      opacity: 0.85;
+    }
+
+    .sectionTitle{
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .4px;
       color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .sectionBody{
       font-size: 13px;
+      color: var(--muted);
       margin: 0;
-      display: -webkit-box;
-      -webkit-line-clamp: 5;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
+      white-space: pre-wrap;
+      word-break: break-word;
     }
 
-    .cardFooter{
-      margin-top:auto;
+    .relatedWrap{
       display:flex;
-      justify-content: space-between;
-      gap: 10px;
-      align-items:center;
-      padding: 10px 14px 12px;
-      border-top: 1px solid var(--border);
-      background: linear-gradient(180deg, transparent, rgba(0,0,0,.04));
-    }
-
-    .btnRow{
-      display:flex;
-      gap: 8px;
+      gap: 6px;
       flex-wrap: wrap;
     }
 
+    .cardFooter{
+      padding: 10px 14px;
+      border-top: 1px solid var(--border);
+      background: linear-gradient(180deg, transparent, rgba(0,0,0,.04));
+      display:flex;
+      justify-content: flex-start;
+    }
+
     .btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap: 8px;
       padding: 8px 10px;
       font-size: 12px;
       border-radius: 10px;
       border: 1px solid var(--border);
       background: var(--panel2);
       color: var(--text);
-      cursor:pointer;
+      cursor: pointer;
       text-decoration: none;
-      white-space: nowrap;
-    }
-    .btn:hover{ border-color: rgba(255,255,255,.22); }
-    @media (prefers-color-scheme: light){
-      .btn:hover{ border-color: rgba(10,20,40,.22); }
     }
 
     .btn.primary{
-      border-color: color-mix(in oklab, var(--accent) 45%, var(--border));
       background: color-mix(in oklab, var(--accent) 14%, var(--panel2));
+      border-color: color-mix(in oklab, var(--accent) 45%, var(--border));
     }
-
-    .smallMuted{ color: var(--muted); font-size: 12px; }
-
-    .error{
-      margin-top: 16px;
-      padding: 12px 14px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,80,80,.25);
-      background: rgba(255,80,80,.08);
-      color: var(--text);
-    }
-    .hint{
-      margin-top: 10px;
-      color: var(--muted);
-      font-size: 12px;
-      white-space: pre-wrap;
-    }
-
-    .spacer{ height: 6px; }
   </style>
 </head>
 
@@ -259,163 +193,83 @@
       </div>
     </header>
 
-    <main id="app"></main>
+    <main>
+      <div id="app" class="grid"></div>
+    </main>
   </div>
 
-  <script>
-    // Data files in /data
-    const DATA_URL  = new URL("data/recommendations.json", window.location.href).href;
-    const TOPIC_URL = new URL("data/topic.txt", window.location.href).href;
+<script>
+const DATA_URL  = new URL("data/recommendations.json", location.href).href;
+const TOPIC_URL = new URL("data/topic.txt", location.href).href;
 
-    const app = document.getElementById("app");
-    const stats = document.getElementById("stats");
-    const lastUpdated = document.getElementById("lastUpdated");
-    const weeklyTopic = document.getElementById("weeklyTopic");
+const app = document.getElementById("app");
+const stats = document.getElementById("stats");
+const lastUpdated = document.getElementById("lastUpdated");
+const weeklyTopic = document.getElementById("weeklyTopic");
 
-    function safeText(s){ return (s ?? "").toString(); }
+const esc = s => (s ?? "").toString()
+  .replaceAll("&","&amp;")
+  .replaceAll("<","&lt;")
+  .replaceAll(">","&gt;")
+  .replaceAll('"',"&quot;")
+  .replaceAll("'","&#039;");
 
-    function escapeHtml(str){
-      return safeText(str)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-    }
-    function escapeAttr(str){ return escapeHtml(str).replaceAll("`","&#096;"); }
+const domain = u => { try{return new URL(u).hostname.replace(/^www\./,"")}catch{return""} };
 
-    function domainFromUrl(u){
-      try { return new URL(u).hostname.replace(/^www\./,""); }
-      catch { return ""; }
-    }
+function render(papers){
+  stats.textContent = `${papers.length} paper(s)`;
+  app.innerHTML = "";
 
-    function groupByRelatedTopics(papers){
-      const grouped = new Map();
-      for (const p of papers){
-        const topics = Array.isArray(p.related_topics) ? p.related_topics : [];
-        const key = (topics[0] || "General").trim() || "General";
-        if (!grouped.has(key)) grouped.set(key, []);
-        grouped.get(key).push(p);
-      }
-      return grouped;
-    }
+  for(const p of papers){
+    app.insertAdjacentHTML("beforeend", `
+      <article class="card">
+        <div class="cardBody">
+          <h3 class="cardTitle">
+            <a href="${esc(p.url)}" target="_blank">${esc(p.paper_title)}</a>
+          </h3>
 
-    function render(papers){
-      stats.textContent = `${papers.length} paper(s)`;
-      app.innerHTML = "";
+          <div class="cardSub">
+            ${domain(p.url) ? `<span class="tag">${domain(p.url)}</span>` : ""}
+          </div>
 
-      if (!papers.length){
-        app.innerHTML = `<div class="error">No papers found in recommendations.json.</div>`;
-        return;
-      }
+          <div>
+            <div class="sectionTitle">Summary</div>
+            <p class="sectionBody">${esc(p.paper_summary)}</p>
+          </div>
 
-      const grouped = groupByRelatedTopics(papers);
+          <div>
+            <div class="sectionTitle">Why it matters</div>
+            <p class="sectionBody">${esc(p.relevance)}</p>
+          </div>
 
-      for (const [topic, list] of grouped.entries()){
-        const header = document.createElement("div");
-        header.className = "topicHeader";
-        header.innerHTML = `<h2>${escapeHtml(topic)}</h2><div class="count">${list.length} paper(s)</div>`;
-        app.appendChild(header);
-
-        const grid = document.createElement("div");
-        grid.className = "grid";
-
-        for (const p of list){
-          const url = safeText(p.url);
-          const title = safeText(p.paper_title) || url || "Untitled";
-          const host = domainFromUrl(url);
-          const summary = safeText(p.paper_summary);
-          const relevance = safeText(p.relevance);
-          const extraTopics = Array.isArray(p.related_topics) ? p.related_topics.slice(1) : [];
-
-          const card = document.createElement("article");
-          card.className = "card";
-          card.innerHTML = `
-            <div class="cardBody">
-              <h3 class="cardTitle">
-                <a href="${escapeAttr(url)}" target="_blank" rel="noreferrer noopener">${escapeHtml(title)}</a>
-              </h3>
-
-              <div class="cardSub">
-                ${host ? `<span class="tag">🌐 ${escapeHtml(host)}</span>` : ""}
-                ${extraTopics.slice(0,2).map(t => `<span class="tag"># ${escapeHtml(t)}</span>`).join("")}
-              </div>
-
-              <p class="excerpt">${escapeHtml(summary || relevance || "No summary available.")}</p>
+          <div>
+            <div class="sectionTitle">Related topics</div>
+            <div class="relatedWrap">
+              ${(p.related_topics || []).map(t =>
+                `<span class="tag small"># ${esc(t)}</span>`
+              ).join("")}
             </div>
+          </div>
+        </div>
 
-            <div class="cardFooter">
-              <div class="btnRow">
-                ${url ? `<a class="btn primary" href="${escapeAttr(url)}" target="_blank" rel="noreferrer noopener">Open</a>` : ""}
-                ${url ? `<button class="btn" data-copy="${escapeAttr(url)}">Copy link</button>` : ""}
-              </div>
-              <div class="smallMuted">${escapeHtml(topic)}</div>
-            </div>
-          `;
-          grid.appendChild(card);
-        }
+        <div class="cardFooter">
+          <a class="btn primary" href="${esc(p.url)}" target="_blank">Open</a>
+        </div>
+      </article>
+    `);
+  }
+}
 
-        app.appendChild(grid);
-        const spacer = document.createElement("div");
-        spacer.className = "spacer";
-        app.appendChild(spacer);
-      }
+fetch(TOPIC_URL)
+  .then(r => r.text())
+  .then(t => weeklyTopic.textContent = `Topic: ${t.trim() || "General"}`);
 
-      app.querySelectorAll("button[data-copy]").forEach(btn => {
-        btn.addEventListener("click", async () => {
-          const u = btn.getAttribute("data-copy") || "";
-          try{
-            await navigator.clipboard.writeText(u);
-            btn.textContent = "Copied ✓";
-            setTimeout(()=> btn.textContent = "Copy link", 1200);
-          }catch{
-            btn.textContent = "Copy failed";
-            setTimeout(()=> btn.textContent = "Copy link", 1200);
-          }
-        });
-      });
-    }
-
-    async function loadWeeklyTopic(){
-      try{
-        const res = await fetch(TOPIC_URL, { cache: "no-store" });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const topic = (await res.text()).trim();
-        weeklyTopic.textContent = `Topic: ${topic || "General"}`;
-      }catch{
-        weeklyTopic.textContent = "Topic: General";
-      }
-    }
-
-    async function loadPapers(){
-      try{
-        const res = await fetch(DATA_URL, { cache: "no-store" });
-        if (!res.ok) throw new Error(`Failed to fetch ${DATA_URL} (HTTP ${res.status})`);
-
-        const text = await res.text();
-        let data;
-        try { data = JSON.parse(text); }
-        catch(e){ throw new Error(`recommendations.json is not valid JSON.\n${e.message}`); }
-
-        if (!Array.isArray(data)){
-          throw new Error(`Expected JSON to be a list/array, but got: ${typeof data}`);
-        }
-
-        lastUpdated.textContent = `Updated: ${new Date().toLocaleString()}`;
-        render(data);
-      }catch(err){
-        app.innerHTML = `<div class="error">
-          Could not load <code>data/recommendations.json</code>.
-          <div class="hint">${escapeHtml(err.message)}</div>
-          <div class="hint">Don’t open via <code>file:///</code>. Use GitHub Pages or run <code>python -m http.server</code>.</div>
-        </div>`;
-        stats.textContent = "Load failed";
-      }
-    }
-
-    // Load both (independent)
-    loadWeeklyTopic();
-    loadPapers();
-  </script>
+fetch(DATA_URL)
+  .then(r => r.json())
+  .then(data => {
+    lastUpdated.textContent = `Updated: ${new Date().toLocaleString()}`;
+    render(data);
+  });
+</script>
 </body>
 </html>
