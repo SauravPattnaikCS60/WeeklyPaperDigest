@@ -64,6 +64,7 @@
       flex-wrap:wrap;
       font-size:12px;
       color:var(--muted);
+      align-items:center;
     }
 
     .chip{
@@ -73,11 +74,65 @@
       border:1px solid var(--border);
     }
 
+    .controls{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top: 4px;
+      align-items:center;
+    }
+
+    .toggle{
+      padding: 8px 10px;
+      font-size: 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--panel2);
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .toggle.active{
+      background: color-mix(in oklab, var(--accent) 14%, var(--panel2));
+      border-color: color-mix(in oklab, var(--accent) 45%, var(--border));
+      font-weight: 600;
+    }
+
+    /* NEW: search bar */
+    .searchRow{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top: 6px;
+    }
+
+    .searchInput{
+      flex: 1 1 260px;
+      min-width: 220px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--text);
+      outline: none;
+    }
+    .searchInput::placeholder{ color: color-mix(in oklab, var(--muted) 85%, transparent); }
+
+    .searchBtn{
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--panel2);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 12px;
+    }
+
     /* === GRID === */
     .grid{
       display: flex;
       flex-direction: column;
-      gap: 16px; /* slightly more breathing room */
+      gap: 16px;
     }
 
     /* === CARD === */
@@ -187,9 +242,20 @@
       <h1>Weekly Research Paper Picks</h1>
       <p class="tagline">What I’m reading this week.</p>
       <p class="tagline" id="weeklyTopic">Topic: Loading…</p>
+
       <div class="meta">
         <span class="chip" id="stats">Loading…</span>
-        <span class="chip" id="lastUpdated"></span>
+      </div>
+
+      <div class="controls" role="tablist" aria-label="Paper view">
+        <button class="toggle active" id="btnWeekly" type="button">This week</button>
+        <button class="toggle" id="btnAll" type="button">All papers</button>
+      </div>
+
+      <!-- NEW: search -->
+      <div class="searchRow">
+        <input id="searchInput" class="searchInput" type="search" placeholder="Search title, summary, relevance, tags…" autocomplete="off" />
+        <button id="clearSearch" class="searchBtn" type="button">Clear</button>
       </div>
     </header>
 
@@ -199,13 +265,19 @@
   </div>
 
 <script>
-const DATA_URL  = new URL("data/recommendations.json", location.href).href;
-const TOPIC_URL = new URL("data/topic.txt", location.href).href;
+const WEEKLY_URL = new URL("data/recommendations.json", location.href).href;
+const ALL_URL    = new URL("data/all_recommendations.json", location.href).href;
+const TOPIC_URL  = new URL("data/topic.txt", location.href).href;
 
 const app = document.getElementById("app");
 const stats = document.getElementById("stats");
-const lastUpdated = document.getElementById("lastUpdated");
 const weeklyTopic = document.getElementById("weeklyTopic");
+
+const btnWeekly = document.getElementById("btnWeekly");
+const btnAll = document.getElementById("btnAll");
+
+const searchInput = document.getElementById("searchInput");
+const clearSearch = document.getElementById("clearSearch");
 
 const esc = s => (s ?? "").toString()
   .replaceAll("&","&amp;")
@@ -216,8 +288,33 @@ const esc = s => (s ?? "").toString()
 
 const domain = u => { try{return new URL(u).hostname.replace(/^www\./,"")}catch{return""} };
 
-function render(papers){
-  stats.textContent = `${papers.length} paper(s)`;
+let currentLabel = "This week";
+let currentAll = []; // full list for current view (weekly or all)
+
+function setActive(which){
+  btnWeekly.classList.toggle("active", which === "weekly");
+  btnAll.classList.toggle("active", which === "all");
+}
+
+function searchableText(p){
+  const rt = Array.isArray(p.related_topics) ? p.related_topics.join(" ") : "";
+  return [
+    p.paper_title, p.paper_summary, p.relevance, p.url, rt
+  ].map(x => (x ?? "").toString().toLowerCase()).join(" ");
+}
+
+function applySearch(){
+  const q = (searchInput.value ?? "").trim().toLowerCase();
+  if(!q){
+    render(currentAll, currentLabel);
+    return;
+  }
+  const filtered = currentAll.filter(p => searchableText(p).includes(q));
+  render(filtered, `${currentLabel} • filtered`);
+}
+
+function render(papers, label){
+  stats.textContent = `${papers.length} paper(s) • ${label}`;
   app.innerHTML = "";
 
   for(const p of papers){
@@ -225,7 +322,7 @@ function render(papers){
       <article class="card">
         <div class="cardBody">
           <h3 class="cardTitle">
-            <a href="${esc(p.url)}" target="_blank">${esc(p.paper_title)}</a>
+            <a href="${esc(p.url)}" target="_blank" rel="noopener noreferrer">${esc(p.paper_title)}</a>
           </h3>
 
           <div class="cardSub">
@@ -253,23 +350,77 @@ function render(papers){
         </div>
 
         <div class="cardFooter">
-          <a class="btn primary" href="${esc(p.url)}" target="_blank">Open</a>
+          <a class="btn primary" href="${esc(p.url)}" target="_blank" rel="noopener noreferrer">Open</a>
         </div>
       </article>
     `);
   }
+
+  // Nice empty-state
+  if(papers.length === 0){
+    app.innerHTML = `
+      <article class="card">
+        <div class="cardBody">
+          <h3 class="cardTitle">No matches</h3>
+          <p class="sectionBody">Try a different keyword, or clear the search.</p>
+        </div>
+      </article>
+    `;
+  }
 }
+
+async function loadAndRender(url, label){
+  currentLabel = label;
+  stats.textContent = "Loading…";
+  app.innerHTML = "";
+
+  try{
+    const r = await fetch(url, { cache: "no-store" });
+    if(!r.ok) throw new Error(`Failed to fetch ${label} (${r.status})`);
+    const data = await r.json();
+    currentAll = Array.isArray(data) ? data : [];
+
+    // keep current search term and apply after loading
+    applySearch();
+  }catch(err){
+    currentAll = [];
+    app.innerHTML = `
+      <article class="card">
+        <div class="cardBody">
+          <h3 class="cardTitle">Could not load ${esc(label)}</h3>
+          <p class="sectionBody">${esc(err.message)}</p>
+        </div>
+      </article>
+    `;
+    stats.textContent = `0 paper(s) • ${label}`;
+  }
+}
+
+btnWeekly.addEventListener("click", () => {
+  setActive("weekly");
+  loadAndRender(WEEKLY_URL, "This week");
+});
+
+btnAll.addEventListener("click", () => {
+  setActive("all");
+  loadAndRender(ALL_URL, "All papers");
+});
+
+searchInput.addEventListener("input", applySearch);
+
+clearSearch.addEventListener("click", () => {
+  searchInput.value = "";
+  applySearch();
+  searchInput.focus();
+});
 
 fetch(TOPIC_URL)
   .then(r => r.text())
-  .then(t => weeklyTopic.textContent = `Topic: ${t.trim() || "General"}`);
+  .then(t => weeklyTopic.textContent = `Topic: ${t.trim() || "General"}`)
+  .catch(() => weeklyTopic.textContent = "Topic: General");
 
-fetch(DATA_URL)
-  .then(r => r.json())
-  .then(data => {
-    lastUpdated.textContent = `Updated: ${new Date().toLocaleString()}`;
-    render(data);
-  });
+// Default view
+loadAndRender(WEEKLY_URL, "This week");
 </script>
 </body>
 </html>
