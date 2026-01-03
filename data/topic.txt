@@ -1,1 +1,1 @@
-Self-Supervised Contrastive Losses for Vision Transformers
+Dynamic multi‑objective pretraining for large language models
