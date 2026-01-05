@@ -1,1 +1,1 @@
-Dynamic multi‑objective pretraining for large language models
+Orthogonal initialization for deep neural networks
