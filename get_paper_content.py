@@ -42,9 +42,6 @@ def fetch_paper_content():
             prompt = generate_research_topic_prompt()
             topic = run_groq_api(prompt)
             
-            with open ("data/topic.txt","w") as f:
-                f.write(topic)
-            
             # pull 3 articles for the topic
             paper_urls = f"""
             In the context of {topic}, return exactly {NUMBER_OF_PAPERS} research paper URLs.
@@ -66,6 +63,11 @@ def fetch_paper_content():
                 paper_url_content[paper_title] = response
                 
             json.dump(paper_url_content, open("data/paper_content.json","w"))
+            
+            # update topic only when we get paper content
+            with open ("data/topic.txt","w") as f:
+                f.write(topic)
+            
             return paper_url_content
         except:
             retry += 1
