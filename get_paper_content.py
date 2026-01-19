@@ -7,8 +7,8 @@ import datetime
 from prompts import generate_research_topic_prompt
 from groq_call import run_groq_api
 
-# load_dotenv()
-NUMBER_OF_PAPERS = 3
+load_dotenv()
+NUMBER_OF_PAPERS = 1
 DOMAINS = ["https://arxiv.org/abs/"]
 MAX_RETRYS = 3
 
@@ -21,14 +21,14 @@ def get_start_and_end_dates():
 
     return (start_date, end_date)
 
-def validate_paper_urls(urls):
-    clean_urls = []
+# def validate_paper_urls(urls):
+#     clean_urls = []
     
-    for url in urls:
-        if url.startswith('https') and "arxiv" in url:
-            clean_urls.append(url)
+#     for url in urls:
+#         if url.startswith('https') and "arxiv" in url:
+#             clean_urls.append(url)
     
-    return clean_urls
+#     return clean_urls
 
 def fetch_paper_content():
     
@@ -43,25 +43,19 @@ def fetch_paper_content():
             topic = run_groq_api(prompt)
             
             # pull 3 articles for the topic
-            paper_urls = f"""
-            In the context of {topic}, return exactly {NUMBER_OF_PAPERS} research paper URLs.
-            Select papers that are either seminal and highly cited, or recent and rapidly trending.
-            Only include arXiv links (https://arxiv.org/abs/...).
-            Return only a valid Python list in the form ["url1", "url2", "url3"], with no extra text.
-            """
+            paper_urls = f"""In the context of {topic}, return exactly {NUMBER_OF_PAPERS} research paper URLs. Select papers that are either seminal and highly cited, or recent and rapidly trending. Return only the url, with no extra text."""
+            response = tavily_client.search(paper_urls,max_results=1,include_answer=True,include_domains=DOMAINS)
+            # print(topic)
+            # print(response)
+            paper_title = response["answer"]
+            paper_title = str(paper_title)
+            # paper_title = validate_paper_urls(paper_title)
             
-            response = tavily_client.search(paper_urls,max_results=3,include_answer=True,include_domains=DOMAINS)
-
-            paper_titles = response["answer"]
-            paper_titles = eval(paper_titles)
-            paper_titles = validate_paper_urls(paper_titles)
-            
-            # fetch content for the same topics
+            # fetch content for the same topic
             paper_url_content = {}
-            for paper_title in paper_titles:        
-                response = tavily_client.extract(paper_title,extract_depth="advanced",format="text")
-                paper_url_content[paper_title] = response
-                
+            response = tavily_client.extract(paper_title,extract_depth="advanced",format="text")
+            paper_url_content[paper_title] = response
+            
             json.dump(paper_url_content, open("data/paper_content.json","w"))
             
             # update topic only when we get paper content
@@ -69,7 +63,7 @@ def fetch_paper_content():
                 f.write(topic)
             
             return paper_url_content
-        except:
+        except Exception as e:
             retry += 1
             continue
 
