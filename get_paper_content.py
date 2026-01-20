@@ -7,7 +7,7 @@ import datetime
 from prompts import generate_research_topic_prompt
 from groq_call import run_groq_api
 
-load_dotenv()
+# load_dotenv()
 NUMBER_OF_PAPERS = 1
 DOMAINS = ["https://arxiv.org/abs/"]
 MAX_RETRYS = 3
