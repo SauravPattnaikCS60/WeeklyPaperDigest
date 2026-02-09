@@ -1,1 +1,1 @@
-Calibration-Aware Loss Functions for Uncertainty Estimation in Deep Neural Networks
+Robust loss functions for deep neural networks under label noise
