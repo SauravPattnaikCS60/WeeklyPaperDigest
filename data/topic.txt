@@ -1,1 +1,1 @@
-Retrieval-Augmented Generation for Open-Domain Question Answering
+Gradient Checkpointing for Memory‑Efficient Training of Deep Neural Networks
