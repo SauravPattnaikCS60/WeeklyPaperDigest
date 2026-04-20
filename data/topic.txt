@@ -1,1 +1,1 @@
-Self-supervised Pretraining for Low-Resource NLP
+Depth–width scaling laws for deep learning performance
