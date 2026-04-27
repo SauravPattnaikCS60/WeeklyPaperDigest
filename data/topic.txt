@@ -1,1 +1,1 @@
-Depth–width scaling laws for deep learning performance
+Gradient sparsification for communication‑efficient distributed deep learning
