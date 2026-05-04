@@ -1,1 +1,1 @@
-Gradient sparsification for communication‑efficient distributed deep learning
+Latency‑Throughput Optimization in Distributed Model Serving Systems
