@@ -1,1 +1,1 @@
-Adaptive sparsity in transformer attention mechanisms
+Calibration‑aware loss functions for robust uncertainty estimation in deep learning
