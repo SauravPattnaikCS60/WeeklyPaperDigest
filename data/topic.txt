@@ -1,1 +1,1 @@
-Scalable gradient checkpointing for large-scale deep learning models
+Adaptive Activation Functions for Stable Gradient Flow
