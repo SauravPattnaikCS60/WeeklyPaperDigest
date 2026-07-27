@@ -1,1 +1,1 @@
-Adaptive Activation Functions for Stable Gradient Flow
+Depth–width trade-offs in scalable neural network design
