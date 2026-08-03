@@ -1,1 +1,1 @@
-Depth–width trade-offs in scalable neural network design
+Scalable Kernel Approximation via Random Features for Massive Data
