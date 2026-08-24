@@ -1,1 +1,1 @@
-AI Model Lifecycle Management in Production: Case Studies
+Scalable communication-efficient distributed training of transformer models
