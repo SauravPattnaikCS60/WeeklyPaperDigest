@@ -1,1 +1,1 @@
-Scalable communication-efficient distributed training of transformer models
+Implicit regularization in overparameterized deep neural network training
