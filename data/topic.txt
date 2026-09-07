@@ -1,1 +1,1 @@
-Implicit regularization in overparameterized deep neural network training
+Hybrid Normalization Techniques for Transformer Architectures
