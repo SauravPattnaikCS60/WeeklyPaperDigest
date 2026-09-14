@@ -1,1 +1,1 @@
-Hybrid Normalization Techniques for Transformer Architectures
+Gradient flow behavior in deep neural networks across diverse activation functions
